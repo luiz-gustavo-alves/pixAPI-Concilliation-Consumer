@@ -10,7 +10,10 @@ using consumer.Helpers;
 
 string API_URL = "http://localhost:5000";
 string PSP_URL = "http://localhost:5280";
-HttpClient httpClient = new();
+HttpClient httpClient = new()
+{
+  Timeout = TimeSpan.FromSeconds(600)
+};
 
 /* Concilliation Consumer */
 ConnectionFactory factory = new()
@@ -58,7 +61,7 @@ consumer.Received += async (model, ea) =>
       throw new InvalidResponseException("Invalid content response");
 
     await httpClient.PostAsJsonAsync($"{PSP_URL}/{message.Postback}", output);
-    
+
     DateTime end = DateTime.Now;
     var timeDiff = (end - start).TotalSeconds;
     Console.WriteLine($"[*] Concilliation {message.Token} - Finished in {timeDiff} seconds!");
@@ -73,6 +76,11 @@ consumer.Received += async (model, ea) =>
       basicProperties: ea.BasicProperties,
       body: body
     );
+  }
+  finally
+  {
+    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", message.Token);
+    await httpClient.PostAsJsonAsync($"{API_URL}/concilliation/finish", message);
   }
 };
 
