@@ -33,3 +33,12 @@ public class ConcilliationOutputDTO
 
 API or/and PSP unavaible:
   - Reject and publish message to queue.
+
+## Links
+
+| Description | URL |
+| --- | --- |
+| Pix API | https://github.com/luiz-gustavo-alves/pixAPI
+| PSP Mock | https://github.com/luiz-gustavo-alves/pixAPI-PSP-Mock
+| Payment Consumer | https://github.com/luiz-gustavo-alves/pixAPI-Payments-Consumer
+
